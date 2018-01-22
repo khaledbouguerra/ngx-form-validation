@@ -1,27 +1,92 @@
-# NgxFormValidation
+# ngx-form-validation
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.5.0.
 
-## Development server
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+angular 2 and beyond json powered form validation library
 
-## Code scaffolding
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+  - Exposes a provider that receives an uri( that return a json form) and returns a complete validated FormGroup
+  - Exposes a provider that receives a json form and  returns a complete validated formGroup
+ 
 
-## Build
+### Installation
+Install ngx-form-validation from npm:
+```bash
+npm install ngx-form-validation --save
+```
+### Setup
+Set up in your project like this
+```ts
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
 
-## Running unit tests
+import { AppComponent } from './app.component';
+import {FormValidationModule} from "ngx-form-validation";
+import {ReactiveFormsModule} from "@angular/forms";
+import {HttpClientModule} from "@angular/common/http";
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
-## Running end-to-end tests
+@NgModule({
+  declarations: [
+    AppComponent
+  ],
+  imports: [
+    ReactiveFormsModule,
+    BrowserModule,
+    FormValidationModule,
+    HttpClientModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+```
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+- ReactiveFormsModule and  HttpClientModule are mandatory
 
-## Further help
+Then you import FormValidationService in your component
+```ts
+import {FormValidationService} from "ngx-form-validation/lib/service/form-validation.service";
+.
+.
+.
+constructor(private formValidationService: FormValidationService) {}
+ ```
+ 
+ The following APIs are provided :
+ 
+ Function  | Usage
+---       | ---
+toFormGroup| `Gets the form validation object as a param and returns a complete instance of FormGroup`
+createForm| `Gets the form object from the endpoint (specified by the provided uri) and generates  acomplete FormGroup `
+getValidationObject           | ` Gets the form object from the endpoint (specified by the provided uri)`
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+Here's an example of json powered form
+
+```ts
+ let form: any = [
+    {
+      key: "firstName", value: "khaled", "type": "textarea", validations: {
+      required: true,
+      minLength: "7",
+      maxLength: "8",
+      pattern: "",
+      custom: "",
+      email:false
+    }
+    },
+    {
+      key: "psw", value: "", "type": "password", validations: {
+      required: true,
+      minLength: "7",
+      maxLength: "15",
+      pattern: "",
+      custom: "",
+      email:false
+    }
+    }
+  ];
+
+ ```
+##[Here you can find a fully working example](https://plnkr.co/edit/gGkHcZMgWsA9qcKX5LjJ?p=preview)
